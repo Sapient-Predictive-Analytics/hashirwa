@@ -1,1 +1,5 @@
-issuer_name,product_name,category,certificate_type,certificate_id,region,website_or_qr,photo_filename,event_source,date_collected,verified_by,notes
+issuer_id,issuer_name,product_name,category,certificate_type,certificate_id,region,website_or_qr,event_source,verified_by,data_source,is_mock,verification_status,evidence_url,last_verified_at,privacy_level,notes
+1,Miyagi Farm,Organic Matcha,Agriculture,GAP,GAP-12345,Sendai,https://example.com,seed,Sapient,mock,true,verified,https://example.com/proof/miyagi,2025-11-02,public,Sample mock entry for M1 milestone testing
+2,Uenochu Co.,Ltd,Japanese Food Importer,Food,HACCP,HACCP-67890,Tokyo,https://example.com,seed,Sapient,mock,true,verified,https://example.com/proof/uenochu,2025-11-02,public,Sample mock entry for M1 milestone testing
+
+
