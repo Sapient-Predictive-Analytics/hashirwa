@@ -14,6 +14,7 @@ This repository implements the “Platform Foundation” deliverables for HashiR
 ## Folder structure
 - data/ — dataset + schema
 - docs/ — milestone reports, screenshots
-- mockups/ — UI designs
+- mockups/ — UI/UX design drafts and screenshots used as milestone evidence  
+  *(e.g., issuer form, admin approval, and listing interface visuals)*
 - scripts/ — helpers/validators
 - tech/ — partner testnet + backend stubs
