@@ -1,5 +1,7 @@
 # HashiRWA — Platform Foundation (Milestone 1)
 
+🌐 **Live Prototype:** [https://sapient-predictive-analytics.github.io/hashirwa](https://sapient-predictive-analytics.github.io/hashirwa)
+
 This repository implements the “Platform Foundation” deliverables for HashiRWA’s F14 Milestone‑1.
 
 ## Scope
