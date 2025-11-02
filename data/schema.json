@@ -1,0 +1,14 @@
+{
+  "issuer_name": "string",
+  "product_name": "string",
+  "category": "string",
+  "certificate_type": "string",
+  "certificate_id": "string",
+  "region": "string",
+  "website_or_qr": "string",
+  "photo_filename": "string",
+  "event_source": "string",
+  "date_collected": "string",
+  "verified_by": "string",
+  "notes": "string"
+}

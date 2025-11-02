@@ -1,0 +1,10 @@
+{
+  "issuer_name": "Sample Farm",
+  "product_name": "Organic Matcha",
+  "certificate_type": "JAS",
+  "certificate_id": "JAS-12345",
+  "region": "Kyoto, Japan",
+  "verified_by": "Sapient",
+  "event_source": "testnet-demo",
+  "notes": "Initial metadata registration demo"
+}
