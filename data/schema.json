@@ -1,14 +1,93 @@
 {
-  "issuer_name": "string",
-  "product_name": "string",
-  "category": "string",
-  "certificate_type": "string",
-  "certificate_id": "string",
-  "region": "string",
-  "website_or_qr": "string",
-  "photo_filename": "string",
-  "event_source": "string",
-  "date_collected": "string",
-  "verified_by": "string",
-  "notes": "string"
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HashiRWA Issuer Dataset Schema",
+  "description": "Defines structure for issuer onboarding records for HashiRWA platform (Milestone 1 and beyond).",
+  "type": "object",
+  "properties": {
+    "issuer_id": {
+      "type": "integer",
+      "description": "Unique ID for the issuer entry."
+    },
+    "issuer_name": {
+      "type": "string",
+      "description": "Registered issuer or producer name."
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Primary product name or asset listing."
+    },
+    "category": {
+      "type": "string",
+      "description": "Product or asset category (e.g. Agriculture, Food, Beverage)."
+    },
+    "certificate_type": {
+      "type": "string",
+      "description": "Certification or verification type (e.g. GAP, HACCP, ISO)."
+    },
+    "certificate_id": {
+      "type": "string",
+      "description": "Certificate number or unique ID if available."
+    },
+    "region": {
+      "type": "string",
+      "description": "Geographical region or prefecture of the issuer."
+    },
+    "website_or_qr": {
+      "type": "string",
+      "format": "uri",
+      "description": "Official website or QR verification link."
+    },
+    "event_source": {
+      "type": "string",
+      "description": "Reference for where this data was introduced (e.g. seed, onboarding form, manual entry)."
+    },
+    "verified_by": {
+      "type": "string",
+      "description": "Entity or reviewer verifying this issuer’s information."
+    },
+    "data_source": {
+      "type": "string",
+      "enum": ["mock", "pilot", "production"],
+      "description": "Defines data origin: mock (test), pilot (limited real), or production (fully verified)."
+    },
+    "is_mock": {
+      "type": "boolean",
+      "description": "True if this is a mock/test entry; false for real data."
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": ["draft", "submitted", "verified"],
+      "description": "Lifecycle stage of verification."
+    },
+    "evidence_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Publicly accessible proof (certificate, registry, or screenshot)."
+    },
+    "last_verified_at": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of last verification check (ISO 8601)."
+    },
+    "privacy_level": {
+      "type": "string",
+      "enum": ["public", "restricted"],
+      "description": "Controls visibility in the UI and export layers."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or comments."
+    }
+  },
+  "required": [
+    "issuer_id",
+    "issuer_name",
+    "product_name",
+    "category",
+    "certificate_type",
+    "region",
+    "data_source",
+    "is_mock",
+    "verification_status"
+  ]
 }
