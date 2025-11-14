@@ -2,7 +2,7 @@
 """
 HashiRWA CSV validator
 
-Usage (example):
+Usage:
   python scripts/validate_issuers.py data/issuers.csv ^
       --proof-dir proof ^
       --url-prefix https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/main/proof/ ^
@@ -10,7 +10,6 @@ Usage (example):
 
 Exit code is non-zero if validation fails.
 """
-
 import argparse
 import csv
 import os
@@ -18,13 +17,19 @@ import re
 import sys
 from urllib.parse import urlparse
 
+# Match your actual CSV schema
+ID_COL = "issuer_id"
+COMPANY_COL = "company_name"
+BRAND_COL = "brand_or_product_line"
+PRODUCT_COL = "product_name"
+PROOF_COL = "photo_proof_url"
+
 REQUIRED_COLS = [
-    "id",
-    "company_name",
-    "brand_or_product_line",
+    ID_COL,
+    COMPANY_COL,
     "booth",
     "status",
-    "proof_url",
+    PROOF_COL,
     "visibility",
 ]
 
@@ -34,10 +39,7 @@ VISIBILITY_ENUM = {"public", "private"}
 DATE_COL = "collected_date"   # optional but if present must be YYYY-MM-DD
 WEBSITE_COL = "website"       # optional but if present must be http(s)
 
-URL_PREFIX_DEFAULT = (
-    "https://github.com/Sapient-Predictive-Analytics/"
-    "hashirwa/blob/main/proof/"
-)
+URL_PREFIX_DEFAULT = "https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/main/proof/"
 
 FILENAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*\.(jpg|jpeg|png|webp)$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -85,23 +87,23 @@ def main():
                     problems += 1
                     error(f"required field '{c}' is empty", i)
 
-            # 2) Unique id
-            rid = (row.get("id") or "").strip()
+            # 2) Unique issuer_id
+            rid = (row.get(ID_COL) or "").strip()
             if rid:
                 if rid in seen_ids:
                     problems += 1
-                    error("duplicate id", i)
+                    error("duplicate issuer_id", i)
                 seen_ids.add(rid)
 
-            # 3) Unique (company_name, brand_or_product_line)
+            # 3) Unique (company_name, product_name) pair
             pair = (
-                (row.get("company_name") or "").strip().lower(),
-                (row.get("brand_or_product_line") or "").strip().lower(),
+                (row.get(COMPANY_COL) or "").strip().lower(),
+                (row.get(PRODUCT_COL) or "").strip().lower(),
             )
             if all(pair):
                 if pair in seen_pairs:
                     problems += 1
-                    error("duplicate (company_name, brand_or_product_line)", i)
+                    error("duplicate (company_name, product_name)", i)
                 seen_pairs.add(pair)
 
             # 4) status enum
@@ -109,8 +111,7 @@ def main():
             if status and status not in STATUS_ENUM:
                 problems += 1
                 error(
-                    f"invalid status '{status}' "
-                    f"(expected one of {sorted(STATUS_ENUM)})",
+                    f"invalid status '{status}' (expected one of {sorted(STATUS_ENUM)})",
                     i,
                 )
 
@@ -124,22 +125,32 @@ def main():
                     i,
                 )
 
-            # 6) proof_url prefix and filename
-            purl = (row.get("proof_url") or "").strip()
+            # 6) photo_proof_url prefix and filename
+            purl = (row.get(PROOF_COL) or "").strip()
             if purl:
-                if not purl.startswith(args.url_prefix):
+                # Disallow multiple URLs in this field for now
+                if ";" in purl:
                     problems += 1
-                    error("proof_url must start with url-prefix", i)
-                filename = purl.split("/")[-1]
+                    error(
+                        f"{PROOF_COL} should contain a single URL (no ';' separators)",
+                        i,
+                    )
+
+                first_url = purl.split(";")[0].strip()
+
+                if not first_url.startswith(args.url_prefix):
+                    problems += 1
+                    error(f"{PROOF_COL} must start with url-prefix", i)
+
+                # Strip query string (?raw=true)
+                filename = first_url.split("/")[-1].split("?")[0]
                 if not FILENAME_RE.match(filename):
                     problems += 1
                     error(
-                        f"proof filename not kebab-case or bad extension: "
-                        f"{filename}",
-                        i,
+                        f"proof filename not kebab-case or bad extension: {filename}", i
                     )
+
                 if not args.skip_file_check:
-                    # map to local file under proof-dir
                     local_path = os.path.join(args.proof_dir, filename)
                     if not os.path.exists(local_path):
                         problems += 1
@@ -159,12 +170,6 @@ def main():
                     problems += 1
                     error("website must start with http(s)://", i)
 
-            # 9) booth non-empty already checked; we could add soft rules later
-            booth = (row.get("booth") or "").strip()
-            if booth and len(booth) > 20:
-                # soft warning in future if needed
-                pass
-
         if problems:
             error(
                 f"\nValidation FAILED: {problems} problem(s) found "
@@ -172,7 +177,7 @@ def main():
             )
             sys.exit(1)
         else:
-            print(f"OK - {row_count} row(s) validated with 0 problems.")
+            print(f"OK — {row_count} row(s) validated with 0 problems.")
             sys.exit(0)
 
 
