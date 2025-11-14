@@ -2,11 +2,11 @@
 """
 HashiRWA CSV validator
 
-Usage:
-  python scripts/validate_issuers.py data/issuers.csv ^
-      --proof-dir proof ^
-      --url-prefix https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/main/proof/ ^
-      [--skip-file-check]
+Usage (single line on Windows PowerShell):
+
+  python scripts/validate_issuers.py data/issuers.csv --proof-dir proof --url-prefix https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/main/proof/ 
+
+Use --skip-file-check if you don't have all images locally yet.
 
 Exit code is non-zero if validation fails.
 """
@@ -125,36 +125,34 @@ def main():
                     i,
                 )
 
-            # 6) photo_proof_url prefix and filename
-            purl = (row.get(PROOF_COL) or "").strip()
-            if purl:
-                # Disallow multiple URLs in this field for now
-                if ";" in purl:
+            # 6) photo_proof_url prefix and filenames
+            purl_raw = (row.get(PROOF_COL) or "").strip()
+            if purl_raw:
+                # Allow multiple URLs separated by ';'
+                urls = [u.strip() for u in purl_raw.split(";") if u.strip()]
+                if not urls:
                     problems += 1
-                    error(
-                        f"{PROOF_COL} should contain a single URL (no ';' separators)",
-                        i,
-                    )
+                    error(f"{PROOF_COL} has no valid URLs", i)
 
-                first_url = purl.split(";")[0].strip()
-
-                if not first_url.startswith(args.url_prefix):
-                    problems += 1
-                    error(f"{PROOF_COL} must start with url-prefix", i)
-
-                # Strip query string (?raw=true)
-                filename = first_url.split("/")[-1].split("?")[0]
-                if not FILENAME_RE.match(filename):
-                    problems += 1
-                    error(
-                        f"proof filename not kebab-case or bad extension: {filename}", i
-                    )
-
-                if not args.skip_file_check:
-                    local_path = os.path.join(args.proof_dir, filename)
-                    if not os.path.exists(local_path):
+                for u in urls:
+                    if not u.startswith(args.url_prefix):
                         problems += 1
-                        error(f"missing local proof file: {local_path}", i)
+                        error(f"{PROOF_COL} URL must start with url-prefix: {u}", i)
+
+                    # Strip query string (?raw=true)
+                    filename = u.split("/")[-1].split("?")[0]
+                    if not FILENAME_RE.match(filename):
+                        problems += 1
+                        error(
+                            f"proof filename not kebab-case or bad extension: {filename}",
+                            i,
+                        )
+
+                    if not args.skip_file_check:
+                        local_path = os.path.join(args.proof_dir, filename)
+                        if not os.path.exists(local_path):
+                            problems += 1
+                            error(f"missing local proof file: {local_path}", i)
 
             # 7) collected_date format if present
             cdate = (row.get(DATE_COL) or "").strip()
