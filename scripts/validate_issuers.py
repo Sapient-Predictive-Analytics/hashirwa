@@ -2,12 +2,10 @@
 """
 HashiRWA CSV validator
 
-Usage (single line on Windows PowerShell):
+Usage (single line on PowerShell):
+  python scripts/validate_issuers.py data/issuers.csv --proof-dir proof --url-prefix https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/main/proof/
 
-  python scripts/validate_issuers.py data/issuers.csv --proof-dir proof --url-prefix https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/main/proof/ 
-
-Use --skip-file-check if you don't have all images locally yet.
-
+Use --skip-file-check if the proof images are not on disk yet.
 Exit code is non-zero if validation fails.
 """
 import argparse
@@ -29,8 +27,8 @@ REQUIRED_COLS = [
     COMPANY_COL,
     "booth",
     "status",
-    PROOF_COL,
     "visibility",
+    # PROOF_COL is handled separately (only required for submitted/verified)
 ]
 
 STATUS_ENUM = {"draft", "submitted", "verified"}
@@ -64,7 +62,6 @@ def main():
         error(f"CSV not found: {args.csv_path}")
         sys.exit(2)
 
-    # Read rows
     with open(args.csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         headers = reader.fieldnames or []
@@ -81,7 +78,7 @@ def main():
         for i, row in enumerate(reader, start=2):  # header is line 1
             row_count += 1
 
-            # 1) Required non-empty fields
+            # 1) Required non-empty fields (except photo_proof_url)
             for c in REQUIRED_COLS:
                 if (row.get(c) or "").strip() == "":
                     problems += 1
@@ -125,34 +122,33 @@ def main():
                     i,
                 )
 
-            # 6) photo_proof_url prefix and filenames
+            # 6) photo_proof_url prefix, multiple URLs allowed
             purl_raw = (row.get(PROOF_COL) or "").strip()
-            if purl_raw:
-                # Allow multiple URLs separated by ';'
-                urls = [u.strip() for u in purl_raw.split(";") if u.strip()]
-                if not urls:
+            urls = [u.strip() for u in purl_raw.split(";") if u.strip()]
+
+            # For submitted/verified rows, we require at least one proof URL
+            if status in {"submitted", "verified"} and not urls:
+                problems += 1
+                error(f"{PROOF_COL} is required for status '{status}'", i)
+
+            for u in urls:
+                if not u.startswith(args.url_prefix):
                     problems += 1
-                    error(f"{PROOF_COL} has no valid URLs", i)
+                    error(f"{PROOF_COL} must start with url-prefix: {u}", i)
 
-                for u in urls:
-                    if not u.startswith(args.url_prefix):
+                # Strip query string (?raw=true)
+                filename = u.split("/")[-1].split("?")[0]
+                if not FILENAME_RE.match(filename):
+                    problems += 1
+                    error(
+                        f"proof filename not kebab-case or bad extension: {filename}", i
+                    )
+
+                if not args.skip_file_check:
+                    local_path = os.path.join(args.proof_dir, filename)
+                    if not os.path.exists(local_path):
                         problems += 1
-                        error(f"{PROOF_COL} URL must start with url-prefix: {u}", i)
-
-                    # Strip query string (?raw=true)
-                    filename = u.split("/")[-1].split("?")[0]
-                    if not FILENAME_RE.match(filename):
-                        problems += 1
-                        error(
-                            f"proof filename not kebab-case or bad extension: {filename}",
-                            i,
-                        )
-
-                    if not args.skip_file_check:
-                        local_path = os.path.join(args.proof_dir, filename)
-                        if not os.path.exists(local_path):
-                            problems += 1
-                            error(f"missing local proof file: {local_path}", i)
+                        error(f"missing local proof file: {local_path}", i)
 
             # 7) collected_date format if present
             cdate = (row.get(DATE_COL) or "").strip()
@@ -175,7 +171,7 @@ def main():
             )
             sys.exit(1)
         else:
-            print(f"OK — {row_count} row(s) validated with 0 problems.")
+            print(f"OK - {row_count} row(s) validated with 0 problems.")
             sys.exit(0)
 
 
