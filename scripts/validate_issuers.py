@@ -2,7 +2,7 @@
 """
 HashiRWA CSV validator
 
-Usage (PowerShell):
+Usage (Windows PowerShell example):
   python scripts/validate_issuers.py data/issuers.csv ^
       --proof-dir proof ^
       --url-prefix https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/main/proof/ ^
@@ -18,13 +18,12 @@ import re
 import sys
 from urllib.parse import urlparse
 
-# Match your actual CSV schema
+# Columns matching your current CSV schema
 ID_COL = "issuer_id"
 COMPANY_COL = "company_name"
 BRAND_COL = "brand_or_product_line"
 PRODUCT_COL = "product_name"
 PROOF_COL = "photo_proof_url"
-EVIDENCE_COL = "evidence_url"
 
 REQUIRED_COLS = [
     ID_COL,
@@ -32,14 +31,13 @@ REQUIRED_COLS = [
     "booth",
     "status",
     "visibility",
-    # PROOF_COL is NOT required for all rows,
-    # but IS required when status == "submitted" (see below).
+    # PROOF_COL is OPTIONAL (but if present, must be valid)
 ]
 
 STATUS_ENUM = {"draft", "submitted", "verified"}
 VISIBILITY_ENUM = {"public", "private"}
 
-DATE_COL = "collected_date"   # optional but if present must be YYYY-MM-DD
+DATE_COL = "collected_date"   # if present must be YYYY-MM-DD
 WEBSITE_COL = "website"       # optional but if present must be http(s)
 
 URL_PREFIX_DEFAULT = (
@@ -85,7 +83,7 @@ def main():
         for i, row in enumerate(reader, start=2):  # header is line 1
             row_count += 1
 
-            # 1) Required non-empty fields (basic sanity)
+            # 1) Required non-empty fields
             for c in REQUIRED_COLS:
                 if (row.get(c) or "").strip() == "":
                     problems += 1
@@ -130,23 +128,16 @@ def main():
                     i,
                 )
 
-            # 6) photo_proof_url – allow multiple URLs separated by ';'
-            pfield = (row.get(PROOF_COL) or "").strip()
-
-            # rule: if status is submitted, photo_proof_url must NOT be empty
-            if status == "submitted" and not pfield:
-                problems += 1
-                error(f"{PROOF_COL} is required for status 'submitted'", i)
-
-            if pfield:
-                urls = [u.strip() for u in pfield.split(";") if u.strip()]
+            # 6) photo_proof_url — allow multiple URLs separated by ';'
+            purl_raw = (row.get(PROOF_COL) or "").strip()
+            if purl_raw:
+                urls = [u.strip() for u in purl_raw.split(";") if u.strip()]
                 for u in urls:
                     if not u.startswith(args.url_prefix):
                         problems += 1
                         error(f"{PROOF_COL} URL must start with url-prefix: {u}", i)
 
-                    # Strip query string (?raw=true) to get filename
-                    filename = u.split("/")[-1].split("?", 1)[0]
+                    filename = u.split("/")[-1].split("?")[0]
                     if not FILENAME_RE.match(filename):
                         problems += 1
                         error(
