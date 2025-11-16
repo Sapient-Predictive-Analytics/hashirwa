@@ -75,6 +75,7 @@ Write normalized output:
 python scripts/validate_issuers.py data/issuers.csv --write-fixed data/issuers_clean.csv
 
 📁 3. Repository Structure (as of M1)
+
 hashirwa/
  ├── data/
  │    ├── issuers.csv
@@ -86,7 +87,6 @@ hashirwa/
  │    └── validate_issuers.py
  ├── README.md
  └── LICENSE
-
 
 This clean directory layout ensures easy navigation and future expansion during M2/M3.
 
