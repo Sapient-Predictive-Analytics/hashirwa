@@ -80,9 +80,16 @@ hashirwa/
  ├── data/
  │    ├── issuers.csv
  │    └── proof/
- │         ├── haranoseichahonpon.jpg
+ │         ├── haranoseichahonpo.jpg
  │         ├── miyagi-farm.jpg
- │         ├── ...
+ │         ├── tomin-namazake.jpg
+ │         ├── kouzou-shuzo.jpg
+ │         ├── unique-bosai.jpg
+ │         ├── marutomo-bussan.jpg
+ │         ├── kimuraya-seafood.jpg
+ │         ├── sawarabi.jpg
+ │         ├── ako-aranami-salt.jpg
+ │         └── sankyo-foods.jpg
  ├── scripts/
  │    └── validate_issuers.py
  ├── README.md
