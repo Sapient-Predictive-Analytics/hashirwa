@@ -1,80 +1,153 @@
 #!/usr/bin/env python3
-import argparse, csv, os, re, sys
+import argparse, csv, sys, os, re
+from datetime import datetime
 from urllib.parse import urlparse
 
-REQUIRED = ["issuer_id","company_name","booth","status","visibility"]
-STATUS = {"draft","submitted","verified"}
-VIS = {"public","private"}
+# === Exact columns in your CSV (lowercased for matching) ===
+CSV_COLS = [
+    "issuer_id","company_name","brand_or_product_line","product_name","category",
+    "certifications","cert_ids_or_details","prefecture_or_region","booth","website",
+    "event","collector","program","nda_required","status","evidence_url",
+    "photo_proof_url","collected_date","visibility","notes"
+]
+REQUIRED_COLS = set(CSV_COLS)
 
-DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-FILE_RE = re.compile(r"^[a-z0-9][a-z0-9-]*\.(jpg|jpeg|png|webp)$")
+ALLOWED_STATUS = {"verified","pending","rejected","archived","active","inactive"}
+ALLOWED_VISIBILITY = {"public","private","hidden"}
 
-URL_PREFIX = "https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/main/proof/"
+def norm(s): return (s or "").strip().lower()
 
-def err(msg,row): print(f"[row {row}] {msg}")
+def has_http(u: str) -> bool:
+    try:
+        p = urlparse(u)
+        return p.scheme in ("http","https")
+    except Exception:
+        return False
+
+def normalize_yesno(val: str) -> str:
+    v = norm(val)
+    if v in {"yes","true","1","y"}:  return "yes"
+    if v in {"no","false","0","n"}:   return "no"
+    raise ValueError(f"expected yes/no, got '{val}'")
+
+def normalize_date(val: str) -> str:
+    s = (val or "").strip()
+    if not s:
+        raise ValueError("empty")
+    s = s.replace("/", "-")
+    # DD-MM-YYYY -> ISO
+    m = re.fullmatch(r"(\d{2})-(\d{2})-(\d{4})", s)
+    if m:
+        dd, mm, yyyy = m.groups()
+        dt = datetime(int(yyyy), int(mm), int(dd))
+        return dt.strftime("%Y-%m-%d")
+    # ISO-ish
+    try:
+        dt = datetime.fromisoformat(s)
+        return dt.strftime("%Y-%m-%d")
+    except Exception:
+        raise ValueError("expected YYYY-MM-DD")
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("csv")
-    ap.add_argument("--skip-file-check",action="store_true")
+    ap = argparse.ArgumentParser(description="HashiRWA issuers.csv validator (tailored)")
+    ap.add_argument("csv_path")
+    ap.add_argument("--assume-http", action="store_true",
+                    help="Auto-prefix http:// if a URL has no scheme (counts as a fix).")
+    ap.add_argument("--allow-empty-urls", action="store_true",
+                    help="Permit empty website/evidence_url/photo_proof_url.")
+    ap.add_argument("--write-fixed", metavar="OUT_CSV",
+                    help="Write normalized copy without modifying the original.")
     args = ap.parse_args()
 
-    with open(args.csv,encoding="utf-8") as f:
+    if not os.path.exists(args.csv_path):
+        print(f"ERROR: CSV not found: {args.csv_path}")
+        sys.exit(2)
+
+    issues = []
+    fixed_rows = []
+    with open(args.csv_path, newline="", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
-        rows = list(reader)
+        if not reader.fieldnames:
+            print("ERROR: No header found.")
+            sys.exit(2)
 
-    problems = 0
+        # Build case-insensitive header map
+        header_actual = [h.strip() for h in reader.fieldnames]
+        header_lc = [h.lower() for h in header_actual]
+        colmap = {h.lower(): h for h in header_actual}
 
-    # Required columns
-    for c in REQUIRED:
-        if c not in reader.fieldnames:
-            print(f"Missing column: {c}")
-            sys.exit(1)
+        missing = [c for c in REQUIRED_COLS if c not in header_lc]
+        extra = [h for h in header_lc if h not in REQUIRED_COLS]
+        if missing:
+            print("ERROR: Missing required columns:", ", ".join(missing))
+            sys.exit(2)
+        if extra:
+            print("NOTE: Extra columns present (ignored by rules):", ", ".join(extra))
 
-    for i,row in enumerate(rows, start=2):
+        rownum = 1
+        for row in reader:
+            rownum += 1
+            out = dict(row)
 
-        # Required fields
-        for c in REQUIRED:
-            if not row.get(c,"").strip():
-                problems+=1; err(f"Missing {c}",i)
+            # status
+            raw_status = row[colmap["status"]]
+            st = norm(raw_status)
+            if st not in ALLOWED_STATUS:
+                issues.append(f"[row {rownum}][status] Invalid '{raw_status}'. "
+                              f"Allowed: {sorted(ALLOWED_STATUS)}")
+            else:
+                out[colmap["status"]] = st
 
-        # Status
-        if row["status"].lower() not in STATUS:
-            problems+=1; err("Invalid status",i)
+            # visibility
+            raw_vis = row[colmap["visibility"]]
+            vis = norm(raw_vis)
+            if vis not in ALLOWED_VISIBILITY:
+                issues.append(f"[row {rownum}][visibility] Invalid '{raw_vis}'. "
+                              f"Allowed: {sorted(ALLOWED_VISIBILITY)}")
+            else:
+                out[colmap["visibility"]] = vis
 
-        # Visibility
-        if row["visibility"].lower() not in VIS:
-            problems+=1; err("Invalid visibility",i)
+            # nda_required
+            try:
+                out[colmap["nda_required"]] = normalize_yesno(row[colmap["nda_required"]])
+            except ValueError as e:
+                issues.append(f"[row {rownum}][nda_required] {e}.")
 
-        # Date
-        d=row.get("collected_date","").strip()
-        if d and not DATE_RE.match(d):
-            problems+=1; err("Bad date format",i)
+            # collected_date
+            try:
+                out[colmap["collected_date"]] = normalize_date(row[colmap["collected_date"]])
+            except ValueError as e:
+                issues.append(f"[row {rownum}][collected_date] Bad date '{row[colmap['collected_date']]}' ({e}).")
 
-        # Website
-        w=row.get("website","").strip()
-        if w:
-            p=urlparse(w)
-            if p.scheme not in {"http","https"}:
-                problems+=1; err("Website must be http(s)",i)
+            # URL checks
+            for col in ("website","evidence_url","photo_proof_url"):
+                raw = (row[colmap[col]] or "").strip()
+                if not raw:
+                    if not args.allow_empty_urls:
+                        issues.append(f"[row {rownum}][{col}] URL is empty.")
+                else:
+                    if not has_http(raw):
+                        if args.assume_http:
+                            out[colmap[col]] = f"http://{raw}"
+                        else:
+                            issues.append(f"[row {rownum}][{col}] Must start with http(s):// -> '{raw}'")
 
-        # Proof URL
-        proof=row.get("photo_proof_url","").strip()
-        if proof:
-            urls=[u.strip() for u in proof.split(";") if u.strip()]
-            for u in urls:
-                if not u.startswith(URL_PREFIX):
-                    problems+=1; err("URL must start with proof prefix",i)
-                fname=u.split("/")[-1].split("?")[0]
-                if not FILE_RE.match(fname):
-                    problems+=1; err("Bad proof filename",i)
+            fixed_rows.append(out)
 
-    if problems:
-        print(f"\nValidation FAILED: {problems} issue(s).")
-        sys.exit(1)
+    if issues:
+        for msg in issues: print(msg)
+        print(f"\nValidation FAILED: {len(issues)} issue(s).")
     else:
-        print("OK — 0 problems 🎉")
-        sys.exit(0)
+        print("Validation PASSED ✅")
 
-if __name__=="__main__":
+    if args.write_fixed:
+        with open(args.write_fixed, "w", newline="", encoding="utf-8") as g:
+            writer = csv.DictWriter(g, fieldnames=header_actual)
+            writer.writeheader()
+            writer.writerows(fixed_rows)
+        print(f"Wrote normalized copy to: {args.write_fixed}")
+
+    sys.exit(1 if issues else 0)
+
+if __name__ == "__main__":
     main()
