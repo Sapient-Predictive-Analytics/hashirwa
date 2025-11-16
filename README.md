@@ -8,27 +8,29 @@ structured issuer data, validation tooling, and a reproducible data pipeline tha
 The issuers.csv file follows a strict, validated schema ensuring clean, consistent data ready for downstream processing.
 
 Schema Overview
-Column	Description
-issuer_id	Unique ID for each issuer
-company_name	Company, producer, or manufacturer name
-brand_or_product_line	Brand or line name (optional)
-product_name	Name of the showcased product
-category	Product category (e.g., Tea, Sake, Snacks)
-certifications	Certificates held by the producer
-cert_ids_or_details	Certification numbers or IDs
-prefecture_or_region	Japanese prefecture/region
-booth	Expo booth code
-website	Official website
-event	Event where data was collected
-collector	Data collector (Sapient team)
-program	Program type (e.g., pilot)
-nda_required	yes or no
-status	pending, verified, active, inactive, rejected, archived
-evidence_url	URL to supporting documents (optional for M1)
-photo_proof_url	Photo proofs from Expo
-collected_date	ISO date YYYY-MM-DD
-visibility	public, private, or hidden
-notes	Additional comments
+| Column                    | Description                                                         |
+| ------------------------- | ------------------------------------------------------------------- |
+| **issuer_id**             | Unique ID for each issuer                                           |
+| **company_name**          | Company, producer, or manufacturer name                             |
+| **brand_or_product_line** | Brand or line name (optional)                                       |
+| **product_name**          | Name of the showcased product                                       |
+| **category**              | Product category (e.g., Tea, Sake, Snacks)                          |
+| **certifications**        | Certificates held by the producer                                   |
+| **cert_ids_or_details**   | Certification numbers or IDs                                        |
+| **prefecture_or_region**  | Japanese prefecture/region                                          |
+| **booth**                 | Expo booth code                                                     |
+| **website**               | Official website                                                    |
+| **event**                 | Event where data was collected                                      |
+| **collector**             | Data collector (Sapient team)                                       |
+| **program**               | Program type (e.g., pilot)                                          |
+| **nda_required**          | `yes` or `no`                                                       |
+| **status**                | `pending`, `verified`, `active`, `inactive`, `rejected`, `archived` |
+| **evidence_url**          | URL to supporting documents (optional for M1)                       |
+| **photo_proof_url**       | Photo proofs from Expo                                              |
+| **collected_date**        | ISO date `YYYY-MM-DD`                                               |
+| **visibility**            | `public`, `private`, or `hidden`                                    |
+| **notes**                 | Additional comments                                                 |
+
 
 This schema is compatible with CIP-68 metadata, and supports future RWA mapping.
 
