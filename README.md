@@ -77,23 +77,23 @@ python scripts/validate_issuers.py data/issuers.csv --write-fixed data/issuers_c
 📁 3. Repository Structure (as of M1)
 
 hashirwa/
- ├── data/
- │    ├── issuers.csv
- │    └── proof/
- │         ├── haranoseichahonpo.jpg
- │         ├── miyagi-farm.jpg
- │         ├── tomin-namazake.jpg
- │         ├── kouzou-shuzo.jpg
- │         ├── unique-bosai.jpg
- │         ├── marutomo-bussan.jpg
- │         ├── kimuraya-seafood.jpg
- │         ├── sawarabi.jpg
- │         ├── ako-aranami-salt.jpg
- │         └── sankyo-foods.jpg
- ├── scripts/
- │    └── validate_issuers.py
- ├── README.md
- └── LICENSE
+  data/
+    issuers.csv
+    proof/
+      haranoseichahonpo.jpg
+      miyagi-farm.jpg
+      tomin-namazake.jpg
+      kouzou-shuzo.jpg
+      unique-bosai.jpg
+      marutomo-bussan.jpg
+      kimuraya-seafood.jpg
+      sawarabi.jpg
+      ako-aranami-salt.jpg
+      sankyo-foods.jpg
+  scripts/
+    validate_issuers.py
+  README.md
+  LICENSE
 
 This clean directory layout ensures easy navigation and future expansion during M2/M3.
 
