@@ -1,120 +1,119 @@
-# 🌉 HashiRWA #2 — Fund 15  
+# 🌉 HashiRWA — Fund 14  
 ### Milestone 1: Data Foundation & Validation Pipeline
 
 ![Status](https://img.shields.io/badge/Status-In%20Progress-teal?style=flat-square)
 ![Milestone](https://img.shields.io/badge/Milestone-1-blueviolet?style=flat-square)
-![Fund](https://img.shields.io/badge/Catalyst-Fund%2015-red?style=flat-square)
+![Fund](https://img.shields.io/badge/Catalyst-Fund%2014-red?style=flat-square)
 ![Track](https://img.shields.io/badge/Track-RWA-orange?style=flat-square)
 ![Language](https://img.shields.io/badge/Language-Python-yellow?style=flat-square)
 
----
+> **Future Notice:**  
+> HashiRWA is currently being delivered under **Fund 14**.  
+> A future **Fund 15** expansion will build on this dataset with product-level metadata, tokenization pathways, and oracle integration. A dedicated F15 section will be added once Fund 14 milestones are completed.
 
-## 🔗 Previous Version (Fund 14)
+## Overview
 
-You can view the archived F14 version of HashiRWA here:
+This repository contains **Milestone 1 of HashiRWA**, funded under **Project Catalyst — Fund 14 (RWA Track)**.  
+The milestone establishes the initial data foundation needed to onboard issuers, validate collected information, and prepare for future enrichment and on-chain compatibility.
 
-👉 **[View HashiRWA Fund 14 README](./README_F14.md)**
+Milestone 1 delivers:
+- a clean and standardized `issuers.csv` dataset  
+- a validation tool for quality assurance  
+- photo evidence for issuer verification  
+- directory structure for future datasets  
+- schema designed to align with upcoming CIP-68 metadata work  
 
----
+This forms the base layer for all later development phases.
 
-## 🧭 Navigation
+## 1. Data Schema (`issuers.csv`)
 
-| Section | Description |
-|--------|-------------|
-| [Overview](#overview) | What Milestone 1 delivers |
-| [Data Schema](#1-data-schema-issuerscsv) | Column definitions |
-| [Validation Pipeline](#2-validation--consistency-checks) | Automated checks |
-| [Folder Structure](#3-folder-structure) | Repo layout |
-| [Usage Guide](#4-usage-guide) | How to run validators |
-| [Next Steps](#next-steps) | Milestone 2–4 roadmap |
+The schema used in Fund 14 Milestone 1 includes the following fields:
 
----
+| Column                    | Description                                                         |
+|---------------------------|---------------------------------------------------------------------|
+| **issuer_id**             | Unique ID for each issuer                                           |
+| **company_name**          | Company or producer name                                            |
+| **brand_or_product_line** | Brand or product line                                               |
+| **product_name**          | Name of the showcased product                                       |
+| **category**              | Product category (e.g., Tea, Sake, Snacks)                          |
+| **certifications**        | Certifications held                                                 |
+| **cert_ids_or_details**   | Certification numbers or details                                    |
+| **prefecture_or_region**  | Japanese prefecture or region                                       |
+| **booth**                 | Expo booth number                                                   |
+| **website**               | Official website                                                    |
+| **event**                 | Event where the data was collected                                  |
+| **collector**             | Sapient team data collector                                         |
+| **program**               | Program type (e.g., pilot)                                          |
+| **nda_required**          | yes / no                                                            |
+| **status**                | pending / verified / active / inactive / rejected / archived        |
+| **evidence_url**          | Optional URL to supporting documents                                |
+| **photo_proof_url**       | Photo proof taken at the expo                                       |
+| **collected_date**        | ISO date (YYYY-MM-DD)                                               |
+| **visibility**            | public / private / hidden                                           |
+| **notes**                 | Additional comments                                                 |
 
-## 🌟 Overview
+This schema supports clean ingestion, structured sorting, and future RWA metadata mapping.
 
-This repository contains **Milestone 1** for **HashiRWA #2 (Fund 15)** under the **Real-World Asset Track**.
+## 2. Validation Tool (`validate_issuers.py`)
 
-Milestone 1 establishes the **base data infrastructure** for expanding from issuer-level metadata (Fund 14) to product-level metadata, tokenization pathways, and oracle integration.
+A custom Python validation script ensures consistency and data quality across all `issuers.csv` entries.
 
-Deliverables include:
+### Features
+- Required field checks  
+- URL validation  
+- ISO date formatting  
+- Allowed enums (`status`, `visibility`, `nda_required`)  
+- Duplicate issuer detection  
+- Whitespace and comma-handling normalization  
+- Optional strict mode for evidence URLs  
 
-- a clean, standardized `issuers.csv`
-- evidence-backed issuer onboarding
-- Python-based validator tools
-- reproducible data checks for Catalyst audits
+### Usage
 
-This is the foundation for the F15 roadmap.
-
----
-
-## 📂 1. Data Schema (`issuers.csv`)
-
-The dataset follows a strict schema to ensure consistent, machine-readable records.
-
-| Column | Description |
-|--------|-------------|
-| **issuer_id** | Unique identifier |
-| **company_name** | Producer or manufacturer |
-| **brand_or_product** | Main product or brand |
-| **country** | Country (ISO) |
-| **prefecture_or_state** | Region / prefecture / state |
-| **city** | City |
-| **category** | High-level category |
-| **subcategory** | Optional refinement |
-| **contact_person** | Point of contact |
-| **contact_email** | Verified email |
-| **website** | Official URL |
-| **address** | Physical address |
-| **latitude** | Optional GPS |
-| **longitude** | Optional GPS |
-| **proof_image_path** | Path to photo proof in `/proof/` |
-| **remarks** | Notes |
-
----
-
-## 🛡️ 2. Validation & Consistency Checks
-
-The pipeline performs:
-
-- schema checks  
-- URL + email format validation  
-- required-field checks  
-- duplicate detection  
-- proof-path verification  
-- encoding & whitespace cleanup  
-
-A `validation_report.json` is auto-generated.
-
----
-
-## 🗂️ 3. Folder Structure
-
-
-The pipeline performs:
-
-- schema checks  
-- URL + email format validation  
-- required-field checks  
-- duplicate detection  
-- proof-path verification  
-- encoding & whitespace cleanup  
-
-A `validation_report.json` is auto-generated.
-
-
----
-
-## 🧪 4. Usage Guide
-
-Run the validator:
-
+Relaxed mode (default for M1):
 ```bash
-python validation/validate_csv.py
+python scripts/validate_issuers.py data/issuers.csv --allow-empty-urls
 
-✓ Schema valid
-✓ 24 issuers checked
-⚠ 1 missing proof image: JP_014
-Report saved to validation_report.json
+3. Repository Structure
+hashirwa/
+│
+├── data/
+│   ├── issuers.csv
+│   └── proof/
+│       ├── haranoseichahonpo.jpg
+│       ├── miyagi-farm.jpg
+│       ├── tomin-namazake.jpg
+│       ├── kouzou-shuzo.jpg
+│       ├── unique-bosai.jpg
+│       ├── marutomo-bussan.jpg
+│       ├── kimuraya-seafood.jpg
+│       ├── sawarabi.jpg
+│       ├── ako-aranami-salt.jpg
+│       └── sankyo-foods.jpg
+│
+├── scripts/
+│   └── validate_issuers.py
+│
+├── README.md
+└── LICENSE
 
+4. Milestone 1 Completion Summary
 
+Milestone 1 successfully delivers:
 
+✔ A standardized issuer dataset
+
+✔ Completed CSV schema suitable for RWA onboarding
+
+✔ Fully functional validator script
+
+✔ Normalization of boolean, date, and status fields
+
+✔ Organized photo proofs in /data/proof/
+
+✔ Clear developer and reviewer documentation
+
+✔ A robust starting point for Milestone 2 (AI-assisted enrichment)
+
+✔ Schema alignment toward future CIP-68 on-chain metadata
+
+HashiRWA Fund 14 establishes the data backbone on which future functionality — including Fund 15 expansion — will be built.
