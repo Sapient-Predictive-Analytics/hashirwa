@@ -67,13 +67,14 @@ A custom Python validation script ensures consistency and data quality across al
 - Whitespace and comma-handling normalization  
 - Optional strict mode for evidence URLs  
 
-### Usage
+## Usage
 
-Relaxed mode (default for M1):
+### Strict mode (recommended for future milestones)
 ```bash
-python scripts/validate_issuers.py data/issuers.csv --allow-empty-urls
+python scripts/validate_issuers.py data/issuers.csv
 
-3. Repository Structure
+python scripts/validate_issuers.py data/issuers.csv --write-fixed data/issuers_clean.csv
+
 hashirwa/
 │
 ├── data/
@@ -96,24 +97,3 @@ hashirwa/
 ├── README.md
 └── LICENSE
 
-4. Milestone 1 Completion Summary
-
-Milestone 1 successfully delivers:
-
-✔ A standardized issuer dataset
-
-✔ Completed CSV schema suitable for RWA onboarding
-
-✔ Fully functional validator script
-
-✔ Normalization of boolean, date, and status fields
-
-✔ Organized photo proofs in /data/proof/
-
-✔ Clear developer and reviewer documentation
-
-✔ A robust starting point for Milestone 2 (AI-assisted enrichment)
-
-✔ Schema alignment toward future CIP-68 on-chain metadata
-
-HashiRWA Fund 14 establishes the data backbone on which future functionality — including Fund 15 expansion — will be built.
