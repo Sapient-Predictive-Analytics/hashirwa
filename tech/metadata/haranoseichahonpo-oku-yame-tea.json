@@ -1,0 +1,14 @@
+{
+  "issuer_id": 1,
+  "issuer_name": "Haranoseichahonpo Inc.",
+  "brand_or_product_line": "Oku Yame Tea",
+  "product_name": "Oku Yame Tea (Gyokuro, Hojicha, Genmaicha, Sencha, Shiraore)",
+  "category": "Green tea",
+  "certificate_type": "JFS-B",
+  "certificate_id": "JFS-B24002904-0",
+  "prefecture_or_region": "Fukuoka, Japan",
+  "booth": "A12",
+  "verified_by": "Sapient",
+  "event_source": "hashirwa-testnet-demo",
+  "notes": "Initial metadata registration demo for Oku Yame Tea from Haranoseichahonpo at Food Japan."
+}
