@@ -37,15 +37,15 @@ This forms the data backbone for all later development phases.
 ---
 
 ## 📁 Repository Structure
-hashirwa/
-├── data/ # issuer dataset (issuers.csv)
-├── proof/ # photo evidence for verification
-├── scripts/ # validation tool (validate_issuers.py)
-├── mockups/ # UI/UX outlines for later milestones
-├── docs/ # supporting reference material
-├── tech/ # engineering notes & strict-mode documentation
-└── README.md
 
+hashirwa/
+├── data/                 # issuer dataset (issuers.csv)
+├── proof/                # photo evidence for verification
+├── scripts/              # validation tool (validate_issuers.py)
+├── mockups/              # UI/UX outlines for later milestones
+├── docs/                 # supporting reference material
+├── tech/                 # engineering notes & strict-mode documentation
+└── README.md
 
 ---
 
