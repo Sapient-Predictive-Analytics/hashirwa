@@ -38,6 +38,9 @@ This forms the data backbone for all later development phases.
 
 ## 📁 Repository Structure
 
+### Repository Structure
+
+```plaintext
 hashirwa/
 ├── data/                 # issuer dataset (issuers.csv)
 ├── proof/                # photo evidence for verification
@@ -46,6 +49,7 @@ hashirwa/
 ├── docs/                 # supporting reference material
 ├── tech/                 # engineering notes & strict-mode documentation
 └── README.md
+```
 
 ---
 
