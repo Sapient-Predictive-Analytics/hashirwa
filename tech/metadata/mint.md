@@ -14,3 +14,5 @@ Transaction ID:
 * ASSET        = c9803e0d61c836301c342a98273c50019d8209918b58841f8b6cf17e.e58e9fe9878ee8a3bde88cb6e69cace88897
 * PAYMENT_ADDR = addr_test1vq9cgvjh5p0nm6qqkkud068e7zcdxd5cgwwqeutzec7ys9clag52m
 * TX_IN        = 9ff9e5f641122a99ac9bed3e0fa96fe61454a27558dbc3d28f68d0ecb14d86c4#0
+
+![Metadata](https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/tech/m1/tech/metadata/explorerMint.jpg)
