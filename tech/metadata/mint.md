@@ -1,4 +1,6 @@
-# Preprod Mint for RWA Tokens: HARANO SEICHA HONPO Green Tea from Fukuoka原野製茶本舗
+## Preprod Mint for RWA Tokens: HARANO SEICHA HONPO Green Tea from Fukuoka
+
+### 原野製茶本舗
 
 Transaction ID:
 3ce7adb5714ca14a53dc355a0b39599e3b710fbce4150595a8e0833378b726de
