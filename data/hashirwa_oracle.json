@@ -1,0 +1,8 @@
+{
+  "cert_by_issuer": {
+    "1": { "ok": 1, "std": "JGAP", "sub": "原野製茶本舗" }
+  },
+  "price_by_issuer": {
+    "1": { "ok": 1, "sku": "green_tea_okuyame", "jpy": 4500.00 }
+  }
+}
