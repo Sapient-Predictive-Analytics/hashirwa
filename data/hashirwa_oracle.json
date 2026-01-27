@@ -7,6 +7,6 @@
   "price_by_issuer": {
     "1": {"ok": 1, "sku": "green_tea_okuyame", "jpykg": 4500.00},
     "2": {"ok": 1, "sku": "edomae_baked_sweet_potato", "jpykg": 895.50},
-    "3": {"ok": 0, "sku": "egg_free_range", "jpykg": 2400.00}
+    "3": {"ok": 1, "sku": "egg_free_range", "jpykg": 2400.00}
   }
 }
