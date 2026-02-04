@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "company_name": "Haranoseichahonpo Inc.",
+    "product_name": "Oku Yame Tea",
+    "prefecture": "Fukuoka",
+    "category": "Green tea",
+    "certification": "JFS-B",
+    "lot_size": "500",
+    "harvest_date": "2024-10-01",
+    "contact_email": "admin@sapientswarm.com",
+    "wallet_address": "",
+    "proof_url": "",
+    "status": "approved",
+    "notes": ""
+  }
+]
