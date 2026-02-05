@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}Listings{% endblock %}
+
+{% block content %}
+  <div class="card">
+    <h1 style="margin-top:0;">Approved Listings</h1>
+    <p style="color:#9ca3af;font-size:0.95rem;max-width:640px;">
+      These assets have been approved in the admin panel and are visible to
+      the marketplace. Each row includes a simulated JSON metadata endpoint.
+    </p>
+
+    {% if issuers %}
+      <table style="margin-top:16px;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Company</th>
+            <th>Product</th>
+            <th>Prefecture</th>
+            <th>Category</th>
+            <th>Certification</th>
+            <th>Cert (oracle)</th>
+            <th>Price (oracle)</th>
+            <th>Metadata</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in issuers %}
+            <tr>
+              <td>{{ i.id }}</td>
+              <td>{{ i.company_name }}</td>
+              <td>{{ i.product_name }}</td>
+              <td>{{ i.prefecture }}</td>
+              <td>{{ i.category }}</td>
+              <td>{{ i.certification }}</td>
+              <!-- Cert (oracle) -->
+              <td>
+              <span id="cert_val_{{ i.id }}" style="font-weight:600;color:#9ca3af;">—</span>
+               <button type="button"
+                        onclick="refreshCert({{ i.id }})"
+                       title="Refresh cert"
+                       style="margin-left:8px;padding:4px 8px;border-radius:6px;border:1px solid #334155;background:transparent;color:#22c55e;cursor:pointer;">
+                  ⟳
+               </button>
+             </td>
+
+             <!-- Price (oracle) -->
+            <td>
+             <span id="price_val_{{ i.id }}" style="font-weight:600;color:#9ca3af;">—</span>
+             <button type="button"
+                     onclick="refreshPrice({{ i.id }})"
+                     title="Refresh price"
+                      style="margin-left:8px;padding:4px 8px;border-radius:6px;border:1px solid #334155;background:transparent;color:#22c55e;cursor:pointer;">
+                 ⟳
+            </button>
+           </td>
+
+           <!-- Metadata -->
+           <td>
+            <a href="/metadata/{{ i.id }}">View</a>
+           </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p style="margin-top:16px;color:#9ca3af;">No approved listings yet. Approve at least one asset in the admin panel.</p>
+    {% endif %}
+  </div>
+  <script>
+  const DATASET_URL = "https://raw.githubusercontent.com/Sapient-Predictive-Analytics/hashirwa/tech/m2/data/hashirwa_oracle.json";
+
+  async function refreshCert(issuerId) {
+    const el = document.getElementById(`cert_val_${issuerId}`);
+    el.textContent = "…";
+    el.style.color = "#9ca3af";
+
+    // existing GitHub → cache logic (unchanged)
+    await fetch(`/api/v1/admin/refresh_cert_one?issuer_id=${issuerId}&url=${encodeURIComponent(DATASET_URL)}`, {
+      method: "POST"
+    });
+
+    const res = await fetch(`/api/v1/demo/cert?issuer_id=${issuerId}`);
+    const data = await res.json();
+
+    el.textContent = data.ok ? "True" : "False";
+    el.style.color = data.ok ? "#22c55e" : "#ef4444";
+  }
+
+async function loadPriceFromCache(issuerId) {
+  const el = document.getElementById(`price_val_${issuerId}`);
+  el.textContent = "…";
+  el.style.color = "#9ca3af";
+
+  const res = await fetch(`/api/v1/demo/price?issuer_id=${issuerId}`);
+  const data = await res.json();
+
+  if (!data.ok) {
+    el.textContent = "—";
+    el.style.color = "#ef4444";
+    return;
+  }
+
+  el.textContent = Number(data.jpykg).toFixed(2);
+  el.style.color = "#e5e7eb";
+}
+
+  async function refreshPrice(issuerId) {
+    const el = document.getElementById(`price_val_${issuerId}`);
+    el.textContent = "⛓ verifying…";
+    el.style.color = "#9ca3af";
+
+    // 1) Trigger Chainlink Functions request (on-chain + DON)
+    const trig = await fetch(`/api/v1/admin/trigger_chainlink_price?issuer_id=${issuerId}`, {
+      method: "POST"
+    });
+    const trigData = await trig.json();
+
+    if (!trigData.ok) {
+      el.textContent = "error";
+      el.style.color = "#ef4444";
+      console.log("Chainlink trigger failed:", trigData);
+      return;
+    }
+
+    // 2) Parse Functions response and write verified value into local cache
+    try {
+      const respObj = JSON.parse(trigData.response);
+      const jpykg = respObj?.data?.jpykg;
+      const sku = respObj?.data?.sku || "";
+
+      if (typeof jpykg === "number") {
+        await fetch(`/api/v1/admin/set_price`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ issuer_id: issuerId, sku, jpykg })
+        });
+      }
+    } catch (e) {
+      console.log("Could not parse Functions response:", e);
+    }
+
+    // 3) Read from cache and render
+    const res = await fetch(`/api/v1/demo/price?issuer_id=${issuerId}`);
+    const data = await res.json();
+
+    if (!data.ok) {
+      el.textContent = "—";
+      el.style.color = "#ef4444";
+      return;
+    }
+
+    el.textContent = Number(data.jpykg).toFixed(2);
+    el.style.color = "#e5e7eb";
+  }
+
+  window.addEventListener("load", () => {
+  refreshCert(1);        
+  loadPriceFromCache(1); 
+});
+</script>
+
+{% endblock %}
