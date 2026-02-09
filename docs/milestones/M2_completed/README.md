@@ -41,6 +41,8 @@ Screenshot of fulfillments from the Demo video:
 A successful Callback:
 ![Callback](https://github.com/Sapient-Predictive-Analytics/hashirwa/blob/tech/m2/docs/milestones/M2_completed/consumer_callback.jpg)
 
+[This](https://sepolia.etherscan.io/tx/0x891d7ac77073cf8ede5711a8ecefc1b1ac9ed9889b0e88d879ffdd3e82857c4c) is the transaction hash for the on-chain oracle verification.
+
 
 
 
