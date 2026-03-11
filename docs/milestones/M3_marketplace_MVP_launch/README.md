@@ -104,3 +104,26 @@ https://github.com/Sapient-Predictive-Analytics/hashirwa
 # Summary
 
 The HashiRWA platform has been successfully deployed and is accessible as a live demonstration environment. The milestone confirms the successful launch of the marketplace MVP with issuer and investor workflows, listing verification signals, supporting documentation features, and oracle-enriched reference data.
+
+---
+
+# Milestone Evidence Mapping
+
+The table below links each milestone feature to where it can be verified in the platform or screenshots.
+
+| Milestone Feature | Where to Verify |
+|---|---|
+| Marketplace listings | https://app.hashirwa.trade/marketplace |
+| Investor dashboard | https://app.hashirwa.trade/investor |
+| Watchlist functionality | Investor dashboard screenshot |
+| Notification system | Notifications screenshot |
+| Document vault for due diligence | Document vault screenshot |
+| Verification indicators | Marketplace table (Verified column) |
+| Oracle price signal | Investor dashboard (Price oracle column) |
+
+Screenshots included in this milestone:
+
+- `assets/M3_marketplace_overview.jpg`
+- `assets/M3_investor_dashboard.jpg`
+- `assets/M3_notifications.jpg`
+- `assets/M3_document_vault_proof.jpg`
