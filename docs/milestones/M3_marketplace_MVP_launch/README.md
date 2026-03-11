@@ -72,7 +72,7 @@ Listings display external reference indicators such as certification validation 
 ![Notifications](assets/M3_notifications.jpg)
 
 ### Document Vault
-![Document Vault](assets/M3_document_vault.jpg)
+![Document Vault](assets/M3_document_vault_proof.jpg)
 
 ---
 
