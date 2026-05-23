@@ -1,153 +1,279 @@
-# 🌉 HashiRWA — Fund 14  
+# 🌉 HashiRWA — Fund 14 Close-Out MVP
 
-## Milestone 1: Data Foundation & Validation Pipeline
-
-![Status](https://img.shields.io/badge/Status-In%20Progress-blue)
-![Milestone](https://img.shields.io/badge/Milestone-1-purple)
+![Status](https://img.shields.io/badge/Status-Closeout%20Phase-success)
 ![Catalyst](https://img.shields.io/badge/Catalyst-Fund%2014-orange)
-![Track](https://img.shields.io/badge/Track-RWA-yellow)
+![Track](https://img.shields.io/badge/Track-Cardano%20Use%20Cases-blue)
+![Stage](https://img.shields.io/badge/Stage-Concept%20MVP-purple)
 ![Language](https://img.shields.io/badge/Language-Python-green)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
 
-## 📌 Future Notice
-
-HashiRWA is currently being delivered under **Fund 14**.  
-A future **Fund 15** expansion will build on this dataset with product-level metadata, tokenization pathways, and oracle integration.  
-A dedicated F15 section will be added once Fund 14 milestones are completed.
-
----
-
-## 📘 Overview
-
-This repository contains **Milestone 1 of HashiRWA**, funded under **Project Catalyst — Fund 14 (RWA Track)**.  
-Milestone 1 establishes the initial data foundation required to onboard Japanese agricultural producers, validate collected information, and prepare for future enrichment and on-chain compatibility.
-
-Milestone 1 delivers:
-
-- ✔️ A clean and standardized **issuers.csv** dataset  
-- ✔️ A Python-based **validation tool** for issuer metadata  
-- ✔️ Photo evidence for issuer verification  
-- ✔️ Directory structure for future datasets  
-- ✔️ A schema aligned with emerging metadata standards (CIP-68/CIP-113)  
-- ✔️ Base preparation for producer onboarding workflows
-
-This forms the data backbone for all later development phases.
+> ## 🚀 Final Close-Out Phase
+>
+> This repository now reflects the completed Fund 14 concept-stage MVP delivered for final milestone close-out, including:
+> - issuer & investor workflows
+> - marketplace demonstrations
+> - onboarding evidence
+> - analytics preparation
+> - oracle/reference-feed demonstrations
+> - public close-out materials
 
 ---
 
-## 📁 Repository Structure
+# 📘 Overview
 
-### Repository Structure
+HashiRWA is a concept-stage marketplace MVP developed under Project Catalyst Fund 14 exploring how Japanese agricultural and food-related real-world assets (RWAs) can be onboarded, structured, and presented through a Cardano-oriented discovery environment.
+
+The project focuses on:
+- supplier onboarding workflows
+- investor-facing marketplace discovery
+- oracle/reference-feed demonstrations
+- proof-of-listing concepts
+- analytics preparation
+- document vault and due diligence presentation
+
+Rather than positioning itself as a production marketplace, HashiRWA demonstrates a conservative and modular MVP approach suitable for pilot onboarding, marketplace testing, and future infrastructure expansion.
+
+---
+
+# ✅ Final Milestone Close-Out Scope
+
+The final milestone focused on:
+- issuer and investor workflow expansion
+- marketplace refinement
+- onboarding demonstrations
+- analytics visibility
+- roadmap preparation
+- supplier engagement evidence
+- public close-out delivery
+
+---
+
+# 🖥️ Public Demo Environment
+
+| Component | Route |
+|---|---|
+| Landing Page | `/landing` |
+| Issuer Dashboard | `/issuer` |
+| Investor Dashboard | `/investor` |
+| Marketplace Preview | `/marketplace` |
+
+### 🌐 Live Application
+👉 https://app.hashirwa.trade
+
+---
+
+# 📊 Delivered MVP Components
+
+## ✔️ Issuer Dashboard
+Demonstrates:
+- issuer-side listing visibility
+- onboarding workflow concepts
+- certification visibility
+- oracle-linked pricing references
+- listing management structure
+
+## ✔️ Investor Dashboard
+Demonstrates:
+- marketplace discovery flow
+- watchlist interaction
+- investor-facing listing visibility
+- reference pricing feeds
+- onboarding transparency
+
+## ✔️ Marketplace Preview
+Demonstrates:
+- pilot supplier onboarding presentation
+- product categorization
+- onboarding status visibility
+- document vault references
+- supplier discovery structure
+
+## ✔️ Oracle / Reference Feed Demonstration
+The MVP includes lightweight oracle/reference-feed demonstrations used to display:
+- pricing references
+- refresh indicators
+- market-linked presentation flows
+
+These are implemented as MVP demonstration components rather than production oracle infrastructure.
+
+## ✔️ Analytics & Interaction Preparation
+The platform includes preparation layers for:
+- investor interaction logging
+- marketplace activity tracking
+- watchlist engagement visibility
+- listing interaction analytics
+
+---
+
+# 🧩 Supplier Engagement & Pilot Listings
+
+The MVP includes pilot marketplace representations connected to onboarding discussions and supplier engagement efforts involving Japanese food and agricultural products.
+
+Examples demonstrated in the MVP include:
+- Japanese green tea
+- Edomae aged sweet potato
+- poultry products
+- sake products
+- dried shiitake products
+
+Supplier onboarding was intentionally presented conservatively to avoid overstating finalized participation before onboarding completion.
+
+---
+
+# 📁 Repository Structure
 
 ```plaintext
 hashirwa/
-├── data/                 # issuer dataset (issuers.csv)
-├── proof/                # photo evidence for verification
-├── scripts/              # validation tool (validate_issuers.py)
-├── mockups/              # UI/UX outlines for later milestones
-├── docs/                 # supporting reference material
-├── tech/                 # engineering notes & strict-mode documentation
+├── data/                     # structured marketplace datasets
+├── proof/                    # verification evidence & onboarding proof
+├── scripts/                  # validation & utility scripts
+├── templates/                # Flask/Jinja templates
+├── static/                   # static assets (favicon, images, styles)
+├── mockups/                  # marketplace screenshots & UI previews
+├── docs/                     # supporting documentation
+├── tech/                     # engineering notes & references
 └── README.md
 ```
 
 ---
 
-## 📊 1. Data Schema (`issuers.csv`)
+# 📸 Marketplace & Dashboard Evidence
 
-The dataset includes the following fields:
+The repository includes close-out visual evidence demonstrating:
 
-| Column | Description |
-|--------|-------------|
-| issuer_id | Unique ID for each issuer |
-| company_name | Company or producer name |
-| brand_or_product_line | Brand or product line |
-| product_name | Name of the showcased product |
-| category | Product category (Tea, Sake, Snacks, etc.) |
-| certifications | Certifications held |
-| cert_ids_or_details | Certification numbers or details |
-| prefecture_or_region | Japanese prefecture or region |
-| booth | Expo booth number |
-| website | Official website |
-| event | Event where data was collected |
-| collector | Sapient team data collector |
-| program | Program type (e.g., pilot) |
-| nda_required | yes / no |
+### 🌐 Landing & Onboarding
+- landing page presentation
+- onboarding navigation flow
+- wallet connection preview
+- marketplace entry points
 
----
+### 🏢 Issuer Workflow
+- issuer dashboard structure
+- listing management visibility
+- certification presentation
+- oracle-linked reference pricing
 
-## 🧪 2. Validation Tool (`validate_issuers.py`)
+### 📈 Investor Experience
+- investor dashboard interactions
+- watchlist functionality
+- listing discovery workflow
+- analytics preparation layer
 
-A custom Python validator ensures clean and consistent metadata across all entries.
+### 🛒 Marketplace Demonstration
+- supplier onboarding previews
+- pilot marketplace listings
+- onboarding status indicators
+- document vault references
 
-### Features
-- Required field checks  
-- URL validation  
-- ISO date formatting  
-- Enum enforcement (`status`, `visibility`, `nda_required`)  
-- Duplicate detection  
-- Whitespace & comma normalization  
-
-> Extended developer usage (strict mode, write-fixed CSV) is documented in  
-> 👉 `/tech/README.md`
+### 🔎 Supporting Evidence
+Visual materials and supporting evidence are organized throughout:
+- `/mockups`
+- `/proof`
+- `/docs`
 
 ---
 
-## 🖼️ 3. Verification Photos (`/proof`)
+# 📌 Final Milestone Outputs
 
-Folder includes:
-- Booth photography  
-- Packaging / product photos  
-- Certification evidence  
-- Producer authenticity materials  
-
-These support milestone verification requirements.
-
----
-
-## 🧩 4. Mockups & UX (Foundational)
-
-High-level UI/UX mockups illustrating:
-- Onboarding flow  
-- Listing details  
-- Admin review process  
-
-These guide future functional milestones.
+| Output | Status |
+|---|---|
+| Final close-out report | ✅ Completed |
+| Final close-out video | ✅ Completed |
+| Onboarding pipeline for licensed Japanese issuers | ✅ Demonstrated as MVP |
+| 3 signed LOIs (agriculture products) | ✅ Collected & documented |
+| 10 listings (issuer + demo combined) | ✅ Demonstrated in MVP environment |
+| Feasibility study for next-phase modules | ✅ Included |
+| Updated roadmap for technical & community expansion | ✅ Included |
+| Analytics dashboard tracking investor activity | ✅ Demonstrated |
 
 ---
 
-## 📌 Evidence of Milestone Completion
+# 📌 Acceptance Criteria Coverage
 
-Milestone 1 evidence includes:
-
-1. **Dataset:** `data/issuers.csv`  
-2. **Validation tool:** `scripts/validate_issuers.py`  
-3. **Verification photos:** `/proof`  
-4. **Documentation:** README + `tech/README.md`  
-5. **Directory structure / mockups**  
-6. **Commit history** showing milestone progress  
-
-*(The functional platform demo — onboarding → approval → listing → metadata endpoint — is delivered in a separate repository.)*
-
----
-
-## 🔮 Future Extension (Fund 15)
-
-- Product-level metadata for tokenization  
-- Valuation & pricing models  
-- Oracle integration  
-- Expanded issuer onboarding UI  
-- Marketplace testnet listing  
-- Full CIP-68 compatibility  
-- Smart contract workflows  
-
-A dedicated F15 section will be added after Fund 14 milestones are completed.
+| Acceptance Criteria | Status |
+|---|---|
+| Final close-out report publicly available | ✅ |
+| Final close-out video publicly available | ✅ |
+| LOIs collected and documented | ✅ |
+| Listings connected to live/demo feeds | ✅ |
+| Feasibility study outlines requirements & costs | ✅ |
+| Roadmap shared publicly | ✅ |
+| Investor activity measurable via dashboard | ✅ |
 
 ---
 
-## 📜 License
+# 📌 Evidence of Milestone Completion
+
+Included evidence:
+- public close-out report
+- public close-out video
+- published roadmap
+- onboarding screenshots
+- marketplace screenshots
+- investor dashboard screenshots
+- issuer dashboard screenshots
+- redacted LOIs
+- analytics/dashboard evidence
+- GitHub commit history
+- Cardano preprod transaction evidence
+
+---
+
+# 🔗 Cardano Proof-of-Listing Evidence
+
+Preprod transaction evidence:
+
+https://preprod.cardanoscan.io/transaction/3ce7adb5714ca14a53dc355a0b39599e3b710fbce4150595a8e0833378b726de
+
+This demonstrates the earlier proof-of-listing flow implemented during milestone development.
+
+---
+
+# 🛣️ Roadmap
+
+## ✅ Current MVP (Completed)
+- marketplace discovery environment
+- issuer workflow
+- investor workflow
+- onboarding structure
+- oracle/reference-feed demonstration
+- analytics preparation layer
+
+## 🌱 Next Phase
+- expanded supplier onboarding
+- additional listing refinement
+- improved onboarding automation
+- expanded marketplace coverage
+
+## ⚙️ Infrastructure Expansion
+- externalized API services
+- scalable analytics aggregation
+- enhanced document management
+- structured data integrations
+
+## 🌏 Long-Term Direction
+- broader RWA onboarding support
+- expanded proof-of-listing workflows
+- deeper blockchain integrations
+- production-grade marketplace infrastructure
+
+---
+
+# 📚 Key Learning Outcomes
+
+HashiRWA helped validate:
+- onboarding constraints for traditional suppliers
+- conservative marketplace representation practices
+- issuer/investor workflow structure
+- MVP feasibility for agricultural RWA discovery
+- modular expansion pathways for future development
+
+The project also clarified the operational complexity involved in supplier onboarding, verification presentation, and marketplace readiness within a concept-stage environment.
+
+---
+
+# 📜 License
 
 MIT License.
-
-
-
