@@ -4,7 +4,7 @@ HashiRWA is a proof-of-concept marketplace for Japanese agricultural and food-re
 
 The project was developed as a Project Catalyst Fund 14 MVP. It focuses on the practical groundwork needed before any serious RWA deployment: issuer discovery, product data intake, verification evidence, investor-facing presentation, wallet-aware demo flows, reference pricing, and measurable engagement analytics.
 
-This repository is not a production marketplace and does not issue investment products. It is an open-source demonstration of the onboarding and data layer that a Cardano RWA marketplace would need before moving toward testnet and mainnet workflows.
+This repository is not a production marketplace and does not issue investment products. It is an open-source demonstration of the onboarding and data layer that a Cardano RWA marketplace would need before moving toward securitization or decentralized token issuance.
 
 Live demo: https://app.hashirwa.trade
 
